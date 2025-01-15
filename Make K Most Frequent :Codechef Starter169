@@ -1,0 +1,104 @@
+Make K most Frequent :
+
+Problem Link: https://www.codechef.com/status/P3169
+
+Solution:
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int maxim(vector < int > & freq, int k) {
+    int maxi = 0;
+    for (int i = 0; i <= 21; i++) {
+        if (i != k) maxi = max(maxi, freq[i]);
+    }
+    return maxi;
+}
+
+
+        int solve(vector <int> & arr, int k, int index_k)
+        {
+            int ans = 0;
+            int n=arr.size();
+            // We count frequency of each element accross arr
+            vector < int > freq(21, 0);
+            for (int i = 0; i < n; i++) {
+                freq[arr[i]]++;
+            }
+
+            int k_freq = freq[k];
+
+            int maximum = maxim(freq, k);
+
+            if (maximum <= k_freq)
+            {
+                return 0;
+            }
+            else if (arr[0] == k || arr[n - 1] == k) return 1;
+            else {
+
+                // Prefix k liye code  
+                freq.assign(freq.size(), 0);
+
+                for (int i = 0; i <= index_k; i++) {
+                    freq[arr[i]]++;
+                }
+
+                int pre_freq_of_k = freq[k];
+
+                int pre_maximum = maxim(freq, k);
+
+                if (pre_maximum > pre_freq_of_k)
+                    ans++;
+
+
+                //suffix k liye code
+                freq.assign(freq.size(), 0);
+
+                for (int i = index_k; i < n; i++) {
+                    freq[arr[i]]++;
+                }
+
+                int suf_freq_of_k = freq[k];
+
+                int suf_maximum = maxim(freq, k);
+
+                if (suf_maximum > suf_freq_of_k)
+                    ans++;
+                    
+                if(ans==0) {
+                    ans=1;
+                }
+            }
+            return ans;
+
+        }
+
+int main() {
+        // your code goes here
+        int t;
+        cin >> t;
+        while (t--) {
+
+            //Input 
+            int n, k;
+            cin >> n >> k;
+            vector < int > arr(n, 0);
+            for (int i = 0; i < n; i++) {
+                cin >> arr[i];
+            }
+
+            int ans=0,ansi=5;
+            for (int index = 0; index < n; index++) {
+                if (arr[index] == k) {
+                    ans = solve(arr, k, index);
+                       ansi=min(ans,ansi);
+                    }
+                }
+            cout<<ansi<<endl;
+            
+        }
+
+        return 0;
+}
