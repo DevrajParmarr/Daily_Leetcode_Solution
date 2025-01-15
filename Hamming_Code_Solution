@@ -1,0 +1,76 @@
+CodeChef Contest 169 :
+
+Hamming code solution:
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int countSetBits(int n) {
+    int count = 0;
+    while (n) {
+        count += n & 1;
+        n >>= 1;
+    }
+    return count;
+}
+
+bool canSort(vector<int>& p) {
+    int n = p.size();
+    if (n <= 1) return true;
+    
+    map<int, vector<int>> groups;
+    map<int, vector<int>> positions;
+    
+    vector<int> sorted(n);
+    for(int i = 0; i < n; i++) {
+        sorted[i] = i + 1;
+    }
+    
+    for(int i = 0; i < n; i++) {
+        int bits = countSetBits(p[i]);
+        groups[bits].push_back(p[i]);
+        positions[bits].push_back(i);
+    }
+    
+    for(auto& group : groups) {
+        vector<int>& nums = group.second;
+        vector<int>& pos = positions[group.first];
+        
+        vector<int> required;
+        for(int i : pos) {
+            required.push_back(sorted[i]);
+        }
+        
+        sort(nums.begin(), nums.end());
+        sort(required.begin(), required.end());
+        
+        if(nums != required) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int t;
+    cin >> t;
+    
+    while(t--) {
+        int n;
+        cin >> n;
+        
+        vector<int> p(n);
+        for(int i = 0; i < n; i++) {
+            cin >> p[i];
+        }
+        
+        cout << (canSort(p) ? "YES" : "NO") << "\n";
+    }
+    
+    return 0;
+}
